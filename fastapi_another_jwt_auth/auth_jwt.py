@@ -616,7 +616,7 @@ class AuthJWT(AuthConfig):
         issuer = self._decode_issuer if type_token == 'access' else None
         self._verifying_token(token,issuer)
 
-        if self.get_raw_jwt(token)['type'] != type_token:
+        if 'type' in  self.get_raw_jwt(token) and self.get_raw_jwt(token)['type'] != type_token:
             msg = "Only {} tokens are allowed".format(type_token)
             if type_token == 'access':
                 raise AccessTokenRequired(status_code=422,message=msg)
@@ -634,7 +634,7 @@ class AuthJWT(AuthConfig):
         :param issuer: expected issuer in the JWT
         """
         raw_token = self._verified_token(encoded_token,issuer)
-        if raw_token['type'] in self._denylist_token_checks:
+        if raw_token.get('type') in self._denylist_token_checks:
             self._check_token_is_revoked(raw_token)
 
     def _verified_token(self,encoded_token: str, issuer: Optional[str] = None) -> Dict[str,Union[str,int,bool]]:

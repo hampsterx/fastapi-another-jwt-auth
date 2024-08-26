@@ -4,6 +4,7 @@ from pydantic import (
     field_validator, ConfigDict, BaseModel,
     validator,
     StrictBool,
+    StrictBytes,
     StrictInt,
     StrictStr
 )
@@ -12,7 +13,7 @@ MyType = Union[Sequence[Any], Set[Any]]
 
 class LoadConfig(BaseModel):
     authjwt_token_location: Optional[Union[Sequence[StrictStr], Set[StrictStr]]] = {'headers'}
-    authjwt_secret_key: Optional[StrictStr] = None
+    authjwt_secret_key: Optional[Union[StrictStr,StrictBytes]] = None
     authjwt_public_key: Optional[StrictStr] = None
     authjwt_private_key: Optional[StrictStr] = None
     authjwt_algorithm: Optional[StrictStr] = "HS256"
